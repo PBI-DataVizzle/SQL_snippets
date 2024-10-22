@@ -6,7 +6,7 @@ CREATE OR ALTER FUNCTION dbo.fn_CalculateWorkdaysWithHardcodedHolidays(
 RETURNS INT
 AS
 BEGIN
-    DECLARE @Workdays INT = 1;
+    DECLARE @Workdays INT = 0;
     DECLARE @CurrentDate DATE = @StartDate;
 
     -- Hardcoded UK holidays as a JSON array
