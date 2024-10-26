@@ -9,6 +9,12 @@ WITH RankedProducts AS (
        -- Rank based on total cost without any partitions
        RANK() OVER(ORDER BY SUM([Cost]) DESC) AS cost_rank,
 
+	   -- Rank based on total cost without any partitions
+       DENSE_RANK() OVER(ORDER BY SUM([Cost]) DESC) AS cost_dense_rank,
+
+	   -- Rank based on total cost without any partitions
+       NTILE(10) OVER(ORDER BY SUM([Cost]) DESC) AS cost_ntile_rank,
+
        -- Rank per Category by total cost
        ROW_NUMBER() OVER(PARTITION BY [CategoryName] ORDER BY SUM([Cost]) DESC) AS rank_per_category
 
@@ -17,5 +23,9 @@ WITH RankedProducts AS (
 )
 SELECT * 
 FROM RankedProducts
-WHERE rank_per_category = 1
-ORDER BY [CategoryName], rank_per_category ASC;
+WHERE rank_per_category >= 1
+AND cost_ntile_rank = 1
+ORDER BY cost_rank ASC;
+
+
+
