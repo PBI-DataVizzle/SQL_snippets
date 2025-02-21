@@ -1,9 +1,11 @@
-CREATE OR ALTER PROCEDURE [USP].SP_exec_get_data_types
+CREATE OR ALTER PROCEDURE [USP].SP_get_data_types
 
     @table_schema NVARCHAR(128),
     @table_name NVARCHAR(128)
 AS
 
+-- EXEC [USP].SP_exec_get_data_types @table_schema = 'dbo', @table_name = 'main_table';
+	
 /***
 ------------------------------------------------------------------------------
    ______________  ___  _______    ___  ___  ____  ____________  __  _____  ____
@@ -16,6 +18,7 @@ AS
 	 / __ \/ / / / __/ _ \ \/ /
 	/ /_/ / /_/ / _// , _/\  / 
 	\___\_\____/___/_/|_| /_/  
+	
 -----------------------------------------------------------------------------
 ***/
 
@@ -79,7 +82,7 @@ BEGIN
         new_data_length,
         is_nullable,
 
-        -- Add comma prefix for all rows except the first one
+        -- prepare script for 'insert into'
         CASE 
             WHEN rn = 1 THEN column_name
             ELSE ', ' + column_name
@@ -90,7 +93,7 @@ BEGIN
             ELSE ', ' + CONCAT('[',column_name,']')
         END AS insert_table_script_v2,
 
-        -- Add comma prefix for all rows except the first one
+        -- these columns provide a pastable script 
         CASE 
             WHEN rn = 1 THEN CONCAT_WS( '  ', column_name , UPPER(new_data_type) , new_data_length )
             ELSE ', ' + CONCAT_WS( '  ', column_name , UPPER(new_data_type) , new_data_length )
