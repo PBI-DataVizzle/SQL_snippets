@@ -82,7 +82,7 @@ BEGIN
         new_data_length,
         is_nullable,
 
-        -- prepare script for 'insert into'
+        -- these case statements provide a pastable script for your 'INSERT INTO' snippet. v2 is wrapped in square brackets
         CASE 
             WHEN rn = 1 THEN column_name
             ELSE ', ' + column_name
@@ -93,7 +93,7 @@ BEGIN
             ELSE ', ' + CONCAT('[',column_name,']')
         END AS insert_table_script_v2,
 
-        -- these columns provide a pastable script 
+        -- these case statements provide a pastable script for your 'CREATE TABLE' snippet. v2 is wrapped in square brackets
         CASE 
             WHEN rn = 1 THEN CONCAT_WS( '  ', column_name , UPPER(new_data_type) , new_data_length )
             ELSE ', ' + CONCAT_WS( '  ', column_name , UPPER(new_data_type) , new_data_length )
@@ -104,3 +104,15 @@ BEGIN
         END AS create_table_script_v2
     FROM cte_cleaned;
 END;
+
+/*
+________________________________________________________________
+|   insert_table_script        |   create_table_script         |
+|------------------------------|-------------------------------|
+|        column1               |    column1 NVARCHAR (10)      |
+|      , column2               |   , column2 INT               |
+|      , column3               |   , column3 DECIMAL (18,5)    |
+
+
+
+*/
